@@ -1,3 +1,6 @@
+#PROGRAM TO SET AN ALARM AT A USER-DEFINED TIME
+
+
 from tkinter import *
 from PIL import ImageTk,Image
 import datetime
@@ -7,15 +10,8 @@ import threading
 from tkinter import messagebox
 
 
-def pain():
+def Main():
     
-    
-
-
-
-
-
-
 
     #Tkinter window definition
     clock = Tk()    
@@ -28,18 +24,18 @@ def pain():
     #PART-A: Python Logic component
 
 
-    #thread defining function: whenever an alarm is set, a thread is the
-    #location where the time is taken note
+    #thread defining function: whenever an alarm is set, a th is the
+    #function where the time is taken note
     def th():
-        t1=threading.Thread(target=a,args=())
-        if(timeValidator(hourEntry.get(), minuteEntry.get(), secondEntry.get())):
+        t1=threading.Thread(target=tickerRing,args=())
+        if(timeValidator(hourEntry.get(), minuteEntry.get(), secondEntry.get()) and greater()):
             msg_sub=messagebox.showinfo("Alarm status","Alarm succesfully set!")
             t1.start()
         else:
            msg_sub=messagebox.showinfo("Alarm status","InValid input:") 
 
     #'a' function controls the functionality of the clock
-    def a():
+    def tickerRing():
         a=hourEntry.get()+":"+minuteEntry.get()+":"+secondEntry.get()
         AlarmT=a
         CurrentTime=time.strftime("%H:%M:%S")
@@ -55,15 +51,41 @@ def pain():
                 msg=messagebox.showinfo('RING RING!!',f'{msgi.get()}')
         
         
-            if msg=='ok':
-                mixer.music.stop()
+                if msg=='ok':
+                    mixer.music.stop()
 
+   
+        
+    #TIMEVALIDATOR 1: checks if all the input lies in the correct range 
+    def timeValidator(h,m,s):
+        valid=True
+        if(int(h) in range(0,24)):
+            valid=True
+        else:
+            valid=False
+        if(int(m) in range(0,60) and int(s) in range(0,60)):
+            valid=True
+        else:
+            valid=False
 
+        return valid
+    
+    
+    #TIMEVALIDATOR 2: greater function checks if the user_input_time is less than the current time,
+    #if so, it returns false::
+    
+    #this is called in the thread allocating function th
+    def greater():
+        userTime=hourEntry.get()+":"+minuteEntry.get()+":"+secondEntry.get()
+        CurrentTime=time.strftime("%H:%M:%S")
+        if(userTime<CurrentTime):
+            return False
+        else:
+            return True
 
+     #GUI Definition component
 
-        #GUI Definition component
-
-        #Defining regions in the tkinter window
+    #Defining regions in the tkinter window
     
     header=Frame(clock)
     header.place(x=5,y=5)
@@ -76,7 +98,8 @@ def pain():
     panel.place(x=5,y=70)
 
 
-        #4-clock image
+        #4-clock image: if the clock image is fetchable, it'll display, otherwise
+        #it prints "Image not found on the console"
     try:
         
         clock.iconbitmap('clock_derp.ico')
@@ -87,7 +110,7 @@ def pain():
     except:
         print("Image not found")
         
-        #5
+        #5: Defining Label
     addTime = Label(panel,text = "Alarm Time \n(Hr:Min:Sec)",font=('comic sans',18))
     addTime.grid(row=0,column=1,padx=10,pady=5)
 
@@ -103,31 +126,18 @@ def pain():
     minute.set("00")
     second.set("00")
     
-    hourEntry= Entry(clock, width=2, font=("Arial",18),bg="white",fg="black",textvariable=hour)
+    hourEntry= Entry(panel, width=2, font=("Arial",18),bg="white",fg="black",textvariable=hour)
     hourEntry.place(x=320,y=20)
   
-    minuteEntry= Entry(clock, width=2,font=("Arial",18),bg="white",fg="black",textvariable=minute)
+    minuteEntry= Entry(panel, width=2,font=("Arial",18),bg="white",fg="black",textvariable=minute)
     minuteEntry.place(x=360,y=20)
   
-    secondEntry= Entry(clock, width=2, font=("Arial",18),bg="white",fg="black",textvariable=second)
+    secondEntry= Entry(panel, width=2, font=("Arial",18),bg="white",fg="black",textvariable=second)
     secondEntry.place(x=400,y=20)
 
         ################
 
-    def timeValidator(h,m,s):
-        valid=True
-        if(int(h) in range(0,24)):
-            valid=True
-        else:
-            valid=False
-        if(int(m) in range(0,60) and int(s) in range(0,60)):
-            valid=True
-        else:
-            valid=False
-
-        return valid
-
-
+ 
 
 
 
@@ -147,9 +157,14 @@ def pain():
     start.grid(row=3,column=1,columnspan=2,padx=10,pady=5)
 
     clock.mainloop()
+
+
 print("FUNCTION CALLED")
 
-pain()
+Main()
         
+
+
+
 
 
