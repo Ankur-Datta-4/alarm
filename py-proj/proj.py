@@ -34,7 +34,9 @@ def Main():
         else:
            msg_sub=messagebox.showinfo("Alarm status","InValid input:") 
 
-    #'a' function controls the functionality of the clock
+    #tickerRing function controls the functionality of the alarm. 
+    #It sets the clock ticking, checking at every instance if the user_input_time==CurrentTime
+    #Alarm rings continuously on reaching the specified time
     def tickerRing():
         a=hourEntry.get()+":"+minuteEntry.get()+":"+secondEntry.get()
         AlarmT=a
@@ -49,7 +51,7 @@ def Main():
                 mixer.music.load('alarm.mp3')
                 mixer.music.play()
                 msg=messagebox.showinfo('RING RING!!',f'{msgi.get()}')
-        
+                
         
                 if msg=='ok':
                     mixer.music.stop()
@@ -58,16 +60,10 @@ def Main():
         
     #TIMEVALIDATOR 1: checks if all the input lies in the correct range 
     def timeValidator(h,m,s):
-        valid=True
+        valid=False
         if(int(h) in range(0,24)):
-            valid=True
-        else:
-            valid=False
-        if(int(m) in range(0,60) and int(s) in range(0,60)):
-            valid=True
-        else:
-            valid=False
-
+            if(int(m) in range(0,60) and int(s) in range(0,60)):
+                valid=True
         return valid
     
     
@@ -98,8 +94,8 @@ def Main():
     panel.place(x=5,y=70)
 
 
-        #4-clock image: if the clock image is fetchable, it'll display, otherwise
-        #it prints "Image not found on the console"
+     #4-clock image: if the clock image is fetchable, it'll display, otherwise
+    #it prints "Image not found on the console"
     try:
         
         clock.iconbitmap('clock_derp.ico')
@@ -163,8 +159,5 @@ print("FUNCTION CALLED")
 
 Main()
         
-
-
-
 
 
